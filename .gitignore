@@ -1,0 +1,16 @@
+# Variables de entorno privadas
+.env
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Documentos PDF generados
+*.pdf
+
+# Archivos de configuración del editor
+.vscode/

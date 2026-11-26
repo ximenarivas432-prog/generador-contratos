@@ -1,0 +1,6 @@
+
+Flask
+pydantic
+reportlab
+flasgger
+python-dotenv

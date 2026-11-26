@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resultados del crédito</title>
+
+    <!-- Conexión con la hoja de estilos -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Resultados del crédito</h1>
+        <p>Simulación financiera y tabla de amortización</p>
+    </header>
+
+    <main class="contenedor">
+
+<!-- Confirmación del envío de correo -->
+{% if mensaje %}
+    <div class="exito">
+        {{ mensaje }}
+    </div>
+{% endif %}
+
+        <!-- Información del solicitante -->
+        <section class="tarjeta">
+
+            <h2>Resumen de la solicitud</h2>
+
+            <p><strong>Solicitante:</strong> {{ nombre }}</p>
+
+            <p><strong>Tasa nominal anual:</strong>
+                {{ resultado.tasa_anual }}%
+            </p>
+
+            <p><strong>Plazo:</strong>
+                {{ resultado.plazo_meses }} meses
+            </p>
+
+            <!-- Indicadores financieros -->
+            <div class="resumen">
+
+                <div class="indicador">
+                    <span>Monto del crédito</span>
+                    <strong>
+                        ${{ "{:,.2f}".format(resultado.monto) }}
+                    </strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Mensualidad</span>
+                    <strong>
+                        ${{ "{:,.2f}".format(resultado.mensualidad) }}
+                    </strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Intereses totales</span>
+                    <strong>
+                        ${{ "{:,.2f}".format(resultado.total_intereses) }}
+                    </strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Total pagado</span>
+                    <strong>
+                        ${{ "{:,.2f}".format(resultado.total_pagado) }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Tabla de amortización -->
+        <section class="tarjeta">
+
+            <h2>Tabla de amortización</h2>
+
+            <p>Distribución de los pagos mensuales,
+               intereses, capital y saldo pendiente.</p>
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Mensualidad</th>
+                            <th>Interés</th>
+                            <th>Capital</th>
+                            <th>Saldo restante</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <!-- Generar una fila por cada periodo -->
+                        {% for fila in resultado.tabla %}
+
+                        <tr>
+                            <td>{{ fila.periodo }}</td>
+                            <td>${{ "{:,.2f}".format(fila.mensualidad) }}</td>
+                            <td>${{ "{:,.2f}".format(fila.interes) }}</td>
+                            <td>${{ "{:,.2f}".format(fila.capital) }}</td>
+                            <td>${{ "{:,.2f}".format(fila.saldo) }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- Opciones disponibles -->
+        <section class="tarjeta">
+
+            <h2>Generar contrato</h2>
+
+            <p>Descarga el documento con los datos
+               de la simulación del crédito.</p>
+
+            <form action="/descargar-contrato" method="POST">
+
+                <input type="hidden" name="nombre"
+                       value="{{ nombre }}">
+
+                <input type="hidden" name="monto"
+                       value="{{ resultado.monto }}">
+
+                <input type="hidden" name="tasa_anual"
+                       value="{{ resultado.tasa_anual }}">
+
+                <input type="hidden" name="plazo_meses"
+                       value="{{ resultado.plazo_meses }}">
+
+                <button type="submit">
+                    Descargar contrato PDF
+                </button>
+
+            </form>
+
+
+<!-- Formulario para enviar el contrato por correo -->
+
+<h2>Enviar contrato por correo electrónico</h2>
+
+<p>Introduce el correo del destinatario para
+   enviar el contrato en formato PDF.</p>
+
+<form action="/enviar-contrato" method="POST">
+
+    <input type="hidden" name="nombre"
+           value="{{ nombre }}">
+
+    <input type="hidden" name="monto"
+           value="{{ resultado.monto }}">
+
+    <input type="hidden" name="tasa_anual"
+           value="{{ resultado.tasa_anual }}">
+
+    <input type="hidden" name="plazo_meses"
+           value="{{ resultado.plazo_meses }}">
+
+    <label for="correo">
+        Correo electrónico del destinatario
+    </label>
+
+    <input type="email"
+           id="correo"
+           name="correo"
+           placeholder="cliente@ejemplo.com"
+           maxlength="254"
+           required>
+
+    <button type="submit">
+        Enviar contrato por correo
+    </button>
+
+</form>
+
+            <a href="/" class="boton">
+                Nueva solicitud
+            </a>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Generador Dinámico de Contratos
+           y Tablas de Amortización</p>
+        <p>Proyecto académico</p>
+    </footer>
+
+</body>
+</html>

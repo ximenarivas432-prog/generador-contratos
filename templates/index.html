@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Generador de Contratos</title>
+
+    <!-- Conexión con la hoja de estilos -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Encabezado principal -->
+    <header>
+        <h1>Generador de Contratos</h1>
+        <p>Sistema de gestión y simulación de créditos</p>
+    </header>
+
+    <main class="contenedor">
+
+        <section class="tarjeta">
+
+            <h2>Nueva solicitud de crédito</h2>
+
+            <p>Completa los datos para generar tu tabla
+               de amortización y contrato.</p>
+
+            <!-- Mostrar errores de validación -->
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <!-- Formulario de solicitud -->
+            <form action="/calcular" method="POST">
+
+                <label for="nombre">
+                    Nombre del solicitante
+                </label>
+
+                <input type="text"
+                       id="nombre"
+                       name="nombre"
+                       placeholder="Nombre completo"
+                       maxlength="120"
+                       required>
+
+                <label for="monto">
+                    Monto del crédito ($ MXN)
+                </label>
+
+                <input type="number"
+                       id="monto"
+                       name="monto"
+                       placeholder="100000"
+                       min="0.01"
+                       step="0.01"
+                       required>
+
+                <label for="tasa_anual">
+                    Tasa nominal anual (%)
+                </label>
+
+                <input type="number"
+                       id="tasa_anual"
+                       name="tasa_anual"
+                       placeholder="12"
+                       min="0"
+                       max="100"
+                       step="0.01"
+                       required>
+
+                <label for="plazo_meses">
+                    Plazo en meses
+                </label>
+
+                <input type="number"
+                       id="plazo_meses"
+                       name="plazo_meses"
+                       placeholder="24"
+                       min="1"
+                       step="1"
+                       required>
+
+                <button type="submit">
+                    Calcular amortización
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>Generador Dinámico de Contratos
+           y Tablas de Amortización</p>
+        <p>Proyecto académico</p>
+    </footer>
+
+</body>
+</html>
